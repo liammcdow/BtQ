@@ -1,3 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond the Quarter - Founder Profile Platform</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            font-weight: 600;
+        }
+        
+        /* Header */
+        header {
+            background-color: #1c1917;
+            color: white;
+            padding: 16px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #4b5563;
+            color: white;
+        }
+        
+        /* Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 64px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 64px;
+            background-color: #1c1917;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        
+        .sidebar-item {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+        }
+        
+        .sidebar-item.active {
+            background-color: #3b82f6;
+        }
+        
+        .sidebar-item:hover:not(.active) {
+            background-color: #4b5563;
+        }
+        
+        /* Main content */
+        .main-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Chat */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .message.user {
+            background-color: #dbeafe;
+            align-self: flex-end;
+        }
+        
+        .message.assistant {
+            background-color: white;
+            align-self: flex-start;
+        }
+        
+        .message-header {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .chat-input {
+            padding: 16px;
+            border-top: 1px solid #e5e7eb;
+            background-color: white;
+        }
+        
+        .input-container {
+            display: flex;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .input-container textarea {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            outline: none;
+            resize: none;
+            min-height: 24px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .send-button {
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+        }
+        
+        /* Onboarding */
+        .onboarding {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+        }
+        
+        .onboarding-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+        }
+        
+        .onboarding-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        
+        .progress-container {
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            width: 33%;
+            transition: width 0.3s ease;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+        
+        /* Playbooks */
+        .playbooks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+        
+        .playbook-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .playbook-content {
+            padding: 16px;
+        }
+        
+        .playbook-category {
+            color: #3b82f6;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .playbook-expert {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+        
+        .playbook-footer {
+            padding: 12px 16px;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Insights */
+        .insights-container {
+            padding: 24px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .insights-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+        }
+        
+        .insights-card.full-width {
+            grid-column: span 2;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .insights-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .insights-value {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        .impact-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .impact-high {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .impact-medium {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .risk-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-number {
+            width: 24px;
+            height: 24px;
+            background-color: #dbeafe;
+            color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .journey-timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #e5e7eb;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -32px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            z-index: 1;
+        }
+        
+        .timeline-marker.future {
+            background-color: #d1d5db;
+        }
+        
+        .timeline-content {
+            background-color: #dbeafe;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        
+        .timeline-content.future {
+            background-color: #f3f4f6;
+        }
+        
+        /* Team profiles */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+        
+        .team-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .team-image {
+            height: 200px;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .team-content {
+            padding: 16px;
+        }
+        
+        .team-role {
+            color: #3b82f6;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        /* Blog posts */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .blog-image {
+            height: 160px;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .blog-content {
+            padding: 16px;
+        }
+        
+        .blog-date {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #6b7280;
+        }
+        
+        .modal-body {
+            padding: 16px;
+        }
+        
+        /* Utility classes */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Onboarding screen - show this initially -->
+    <div class="onboarding" id="onboarding-screen">
+        <div class="onboarding-card">
+            <div class="onboarding-header">
+                <div class="logo-icon">B</div>
+                <div style="margin-left: 12px;">
+                    <h1 style="margin: 0; font-size: 24px;">Beyond the Quarter</h1>
+                    <p style="margin: 0; font-size: 14px; color: #6b7280;">Founder Profile Platform</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="flex items-center justify-between mb-2">
+                    <span style="font-size: 14px; font-weight: 500; color: #6b7280;">Step 1 of 3</span>
+                    <span style="font-size: 14px; color: #6b7280;">Your Info</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 33%;"></div>
+                </div>
+            </div>
+            
+            <h2 style="font-size: 20px; margin-top: 0; margin-bottom: 16px;">Let's get started</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" class="form-input" placeholder="Enter your name" id="onboarding-name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" placeholder="Enter your email" id="onboarding-email">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Business Name</label>
+                <input type="text" class="form-input" placeholder="Enter your business name" id="onboarding-business">
+            </div>
+            
+            <div class="form-actions">
+                <div></div> <!-- Empty div for spacing -->
+                <button class="btn btn-primary" onclick="continueOnboarding()">Continue</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main app UI -->
+    <div class="app-container hidden" id="main-app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">B</div>
+                    <div>
+                        <h1 style="margin: 0; font-size: 20px;">Beyond the Quarter</h1>
+                        <p style="margin: 0; font-size: 12px; color: #d1d5db;">Founder Profile Platform</p>
+                    </div>
+                </div>
+                <div class="header-buttons">
+                    <button class="btn btn-primary" onclick="showModal('team-modal')">Speak to an Expert</button>
+                    <button class="btn btn-secondary" onclick="showTab('settings')">My Account</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-layout">
+            <div class="sidebar">
+                <div class="sidebar-item active" onclick="showTab('chat')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('insights')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('playbooks')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('blog')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('team')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div style="flex: 1;"></div>
+                <div class="sidebar-item" onclick="showTab('settings')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <!-- Chat Tab (Default) -->
+                <div class="tab-content" id="chat-tab">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message assistant">
+                                <div class="message-header">Beyond the Quarter</div>
+                                <div>
+                                    Welcome to Beyond the Quarter's Founder Profile Platform. I'm here to help you build a meaningful, profitable, and sustainable business—starting with you as the founder. How can I help you on your founder journey today?
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <div class="input-container">
+                                <textarea placeholder="Type your message here..." rows="1" id="message-input"></textarea>
+                                <button class="send-button" onclick="sendMessage()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 8px;">Press Enter to send, Shift+Enter for new line</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insights Tab -->
+                <div class="tab-content hidden" id="insights-tab">
+                    <div class="insights-container">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Insights</h2>
+                        
+                        <div class="insights-grid">
+                            <!-- Challenge Analysis -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Founder Challenge</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Primary Challenge</div>
+                                    <div class="insights-value">Founder Dependency</div>
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Impact Level</div>
+                                    <div class="impact-badge impact-high">High</div>
+                                </div>
+                                <div>
+                                    <div class="insights-label" style="margin-bottom: 8px;">Risk Areas</div>
+                                    <div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Business continuity</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Growth ceiling</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Founder sustainability</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Operational reliability</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Recommendations</h3>
+                                <div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">1</div>
+                                        <div>Document key decision frameworks</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">2</div>
+                                        <div>Develop and empower leadership team</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">3</div>
+                                        <div>Create systems for knowledge transfer</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">4</div>
+                                        <div>Implement progressive delegation plan</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 24px;">
+                                    <button class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;" onclick="showTab('playbooks')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                        <span>View Recommended Frameworks</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Founder Journey -->
+                            <div class="insights-card full-width">
+                                <h3 class="insights-title">Founder Journey</h3>
+                                <div class="journey-timeline">
+                                    <div class="timeline-line"></div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div style="font-weight: 500;">Current: Hands-On Operator</div>
+                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
+                                                You are deeply involved in day-to-day operations and most decisions run through you
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker future"></div>
+                                        <div class="timeline-content future">
+                                            <div style="font-weight: 500;">Next: Strategic Leader</div>
+                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
+                                                You're focused on strategic direction while your team handles operations
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Playbooks Tab -->
+                <div class="tab-content hidden" id="playbooks-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Frameworks</h2>
+                        
+                        <div class="playbooks-grid">
+                            <!-- Playbook 1 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Growth & Leadership</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Breaking Founder Dependence</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Step-by-step process to move from founder-led to systems-driven</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('founder-independence')">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 2 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Growth & Leadership</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Purpose Beyond Posters</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Embedding purpose into business operations</p>
+                                    <div class="playbook-expert">Expert: Liam McDowell</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('purpose-integration')">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 3 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Founder Journey</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Founder Profile Development</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Create your comprehensive founder profile for strategic growth</p>
+                                    <div class="playbook-expert">Expert: Philip Gault</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('founder-profile')">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 4 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Founder Journey</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Scale-Ready Founder</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Prepare yourself as a founder for business scaling</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('scale-ready-founder')">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 5 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Values & Culture</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Values-Driven Leadership</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Building a team culture aligned with your core values</p>
+                                    <div class="playbook-expert">Expert: Liam McDowell</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('values-driven-leadership')">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 6 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Sustainable Growth</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Balanced Scaling</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Growing your business without sacrificing founder wellbeing</p>
+                                    <div class="playbook-expert">Expert: Philip Gault</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary" onclick="showPlaybookDetail('balanced-scaling')">View Framework</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Blog Tab -->
+                <div class="tab-content hidden" id="blog-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Thoughts, News & Views</h2>
+                        
+                        <div class="blog-grid">
+                            <!-- Blog Post 1 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">May 5, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Bad News May Sell, But It Doesn't Make Things Better</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        What do you do when business "sense" says one thing, but your values say another? A look at how Positive News built success against conventional wisdom.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('bad-news')">Read More</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blog Post 2 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">April 28, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Small Giants: Choosing Greatness Over Growth</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        Bo Burlingham's book charts companies for whom being great matters more than being big, with founders who rejected flashy growth for soul.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('small-giants')">Read More</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blog Post 3 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">April 15, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">The Distributed Workforce: Beyond Remote Work</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        A new approach to how we think about our people, processes and technology in a world where distributed teams are becoming the norm.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('distributed-workforce')">Read More</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blog Post 4 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">April 3, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Building a Business that Serves Humanity</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        How to create businesses that are as much about purpose and values as they are about commercial success.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('business-serves-humanity')">Read More</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blog Post 5 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                        <line x1="4" y1="22" x2="4" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">March 22, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Thinking Beyond the Quarter</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        Why building sustainable, purpose-driven businesses requires looking beyond quarterly results for long-term success.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('beyond-quarter')">Read More</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blog Post 6 -->
+                            <div class="blog-card">
+                                <div class="blog-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="blog-date">March 10, 2025</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">The Karmic Capitalist Approach</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        How leading with values and purpose creates sustainable business growth and meaningful impact.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showBlogPost('karmic-capitalist')">Read More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Tab -->
+                <div class="tab-content hidden" id="team-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Our Team of Experts</h2>
+                        
+                        <div class="team-grid">
+                            <!-- Team Member 1 -->
+                            <div class="team-card">
+                                <div class="team-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-role">Founder</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Iyas AlQasem</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        Iyas has led companies from 2-person startup to 500 employees, through plateaus, rapid growth, acquisitions, IPO, and trade sales.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showTeamMember('iyas')">View Profile</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Team Member 2 -->
+                            <div class="team-card">
+                                <div class="team-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-role">Managing Partner</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Liam McDowell</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        Liam is Managing Partner at Beyond the Quarter and host of the Karmic Capitalist podcast on leading with values and purpose.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showTeamMember('liam')">View Profile</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Team Member 3 -->
+                            <div class="team-card">
+                                <div class="team-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-role">Growth Strategist</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Philip Gault</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">
+                                        Philip specializes in helping purpose-led founders scale their businesses while maintaining their values and founder wellbeing.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="showTeamMember('philip')">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="tab-content hidden" id="settings-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Settings</h2>
+                        
+                        <div class="insights-grid">
+                            <!-- Profile Card -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Founder Profile</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Name</div>
+                                    <div style="font-weight: 500;" id="profile-name">Your Name</div>
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Business</div>
+                                    <div style="font-weight: 500;" id="profile-business">Your Business</div>
+                                </div>
+                                <div>
+                                    <div class="insights-label">Membership Level</div>
+                                    <div style="font-weight: 500;">Founder Profile (Basic)</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preferences Card -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Preferences</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-weight: 500;">Save Conversation History</span>
+                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative; cursor: pointer;" onclick="toggleSwitch(this)">
+                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 14px; color: #6b7280;">
+                                        Allow platform to remember our conversations
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-weight: 500;">Proactive Founder Insights</span>
+                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative; cursor: pointer;" onclick="toggleSwitch(this)">
+                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 14px; color: #6b7280;">
+                                        Enable proactive founder journey insights
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Founder Journey Details Card -->
+                            <div class="insights-card full-width">
+                                <h3 class="insights-title">Founder Journey Details</h3>
+                                <div style="display: grid; gap: 16px;">
+                                    <div>
+                                        <label class="form-label">Business Revenue</label>
+                                        <select class="form-input">
+                                            <option>£0 - £100K</option>
+                                            <option>£100K - £500K</option>
+                                            <option selected>£500K - £1M</option>
+                                            <option>£1M - £3M</option>
+                                            <option>£3M - £8M</option>
+                                            <option>£8M+</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Primary Founder Challenge</label>
+                                        <select class="form-input">
+                                            <option selected>Founder Dependency</option>
+                                            <option>Founder Burnout Risk</option>
+                                            <option>Purpose Disconnect</option>
+                                            <option>Founder Role Evolution</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Founder Purpose (Optional)</label>
+                                        <textarea class="form-input" style="height: 96px;" placeholder="Why did you become a founder?"></textarea>
+                                    </div>
+                                    <div style="padding-top: 16px;">
+                                        <button class="btn btn-primary">Update Profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="playbook-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;" id="playbook-modal-title">Playbook Title</h2>
+                <button class="modal-close" onclick="closeModal('playbook-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="playbook-modal-content">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="team-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;" id="team-modal-title">Speak to Our Experts</h2>
+                <button class="modal-close" onclick="closeModal('team-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="team-modal-content">
+                <p>Select an expert to schedule a consultation:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-top: 16px;">
+                    <div style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;" onclick="scheduleCall('iyas')">
+                        <div style="width: 48px; height: 48px; background-color: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500;">Iyas AlQasem</div>
+                            <div style="font-size: 14px; color: #6b7280;">Founder</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;" onclick="scheduleCall('liam')">
+                        <div style="width: 48px; height: 48px; background-color: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500;">Liam McDowell</div>
+                            <div style="font-size: 14px; color: #6b7280;">Managing Partner</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;" onclick="scheduleCall('philip')">
+                        <div style="width: 48px; height: 48px; background-color: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500;">Philip Gault</div>
+                            <div style="font-size: 14px; color: #6b7280;">Growth Strategist</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="blog-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;" id="blog-modal-title">Blog Post Title</h2>
+                <button class="modal-close" onclick="closeModal('blog-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="blog-modal-content">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="team-profile-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;" id="team-profile-modal-title">Team Member Profile</h2>
+                <button class="modal-close" onclick="closeModal('team-profile-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="team-profile-modal-content">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="calendar-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;" id="calendar-modal-title">Schedule a Call</h2>
+                <button class="modal-close" onclick="closeModal('calendar-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="calendar-modal-content">
+                <p>Select a date and time for your call with <span id="calendar-expert-name">our expert</span>:</p>
+                <div style="margin-top: 16px;">
+                    <div style="margin-bottom: 16px;">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-input" min="2025-05-08">
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label class="form-label">Time</label>
+                        <select class="form-input">
+                            <option>09:00 AM</option>
+                            <option>10:00 AM</option>
+                            <option>11:00 AM</option>
+                            <option>12:00 PM</option>
+                            <option>01:00 PM</option>
+                            <option>02:00 PM</option>
+                            <option>03:00 PM</option>
+                            <option>04:00 PM</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label class="form-label">Topic</label>
+                        <select class="form-input">
+                            <option>Founder Dependency</option>
+                            <option>Burnout Prevention</option>
+                            <option>Purpose Integration</option>
+                            <option>Leadership Development</option>
+                            <option>Business Scaling</option>
+                            <option>Other (Please specify)</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-input" style="height: 96px;" placeholder="Any specific topics you'd like to discuss?"></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="confirmSchedule()">Schedule Call</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirm-modal" class="modal-backdrop hidden">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 20px;">Confirmation</h2>
+                <button class="modal-close" onclick="closeModal('confirm-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Your call has been scheduled. You will receive a confirmation email with details.</p>
+                <div style="text-align: center; margin-top: 16px;">
+                    <button class="btn btn-primary" onclick="closeModal('confirm-modal')">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Application state
+        const state = {
+            currentStep: 1,
+            userName: '',
+            userEmail: '',
+            userBusiness: '',
+            playbookData: {
+                'founder-independence': {
+                    title: 'Breaking Founder Dependence',
+                    description: 'Step-by-step process to move from founder-led to systems-driven',
+                    expert: 'Iyas AlQasem',
+                    steps: [
+                        {
+                            title: 'Audit Decision Points',
+                            description: 'Document all decisions that currently require your input. Identify which are strategic vs. operational, and which could be delegated with proper systems.'
+                        },
+                        {
+                            title: 'Document Knowledge',
+                            description: 'Create standardized processes and knowledge bases for key operational areas. Focus on capturing implicit knowledge that currently exists only in your head.'
+                        },
+                        {
+                            title: 'Develop Leadership Team',
+                            description: 'Identify key team members who can take ownership of different areas. Invest in their development and gradually increase their decision-making authority.'
+                        },
+                        {
+                            title: 'Implement Systems',
+                            description: 'Establish clear processes, metrics, and feedback loops that allow the team to make decisions autonomously within defined parameters.'
+                        },
+                        {
+                            title: 'Progressive Handover',
+                            description: 'Create a phased plan to transition from hands-on management to strategic leadership, with milestones and check-ins to ensure successful delegation.'
+                        }
+                    ]
+                },
+                'purpose-integration': {
+                    title: 'Purpose Beyond Posters',
+                    description: 'Embedding purpose into business operations',
+                    expert: 'Liam McDowell',
+                    steps: [
+                        {
+                            title: 'Articulate Authentic Purpose',
+                            description: 'Define a clear, compelling purpose that authentically represents why your business exists beyond profit. Connect to your personal values and motivations.'
+                        },
+                        {
+                            title: 'Align Strategy',
+                            description: 'Review your business strategy to ensure alignment with your purpose. Identify any areas of disconnect and recalibrate as needed.'
+                        },
+                        {
+                            title: 'Operational Integration',
+                            description: 'Embed purpose into daily operations through decision-making frameworks, policies, and processes. Create systems that make purpose-aligned actions the default.'
+                        },
+                        {
+                            title: 'Measurement Systems',
+                            description: 'Develop metrics that track both purpose impact and financial performance. Create dashboards that give equal visibility to both aspects.'
+                        },
+                        {
+                            title: 'Communication Systems',
+                            description: 'Build regular rhythms for sharing purpose-related stories, metrics, and decisions throughout the organization to reinforce its importance.'
+                        }
+                    ]
+                },
+                'founder-profile': {
+                    title: 'Founder Profile Development',
+                    description: 'Create your comprehensive founder profile for strategic growth',
+                    expert: 'Philip Gault',
+                    steps: [
+                        {
+                            title: 'Strengths & Values Assessment',
+                            description: 'Identify your core strengths, values, and motivations as a founder. Understand how these shape your leadership style and business decisions.'
+                        },
+                        {
+                            title: 'Founder Vision Development',
+                            description: 'Clarify your personal vision for the business and your role within it. Define what success looks like for you beyond financial metrics.'
+                        },
+                        {
+                            title: 'Leadership Style Optimisation',
+                            description: 'Assess your current leadership approach and identify opportunities to leverage strengths and mitigate blind spots. Develop strategies for growth areas.'
+                        },
+                        {
+                            title: 'Work-Life Integration',
+                            description: 'Create a sustainable model that supports your wellbeing while driving business success. Define boundaries and practices that prevent burnout.'
+                        },
+                        {
+                            title: 'Strategic Growth Plan',
+                            description: 'Develop a personal growth roadmap that evolves your role alongside business growth. Plan for how your focus will shift as the company scales.'
+                        }
+                    ]
+                },
+                'scale-ready-founder': {
+                    title: 'Scale-Ready Founder',
+                    description: 'Prepare yourself as a founder for business scaling',
+                    expert: 'Iyas AlQasem',
+                    steps: [
+                        {
+                            title: 'Scale Readiness Assessment',
+                            description: 'Evaluate your personal readiness for scaling - including skills, mindset, support systems, and capacity. Identify potential bottlenecks.'
+                        },
+                        {
+                            title: 'Personal Operating System',
+                            description: 'Design your optimal working patterns, including time management, decision frameworks, and energy management to sustain you through scaling.'
+                        },
+                        {
+                            title: 'Leadership Team Development',
+                            description: 'Build a leadership team that complements your strengths and can drive growth without constant founder involvement.'
+                        },
+                        {
+                            title: 'Strategic Focus Areas',
+                            description: 'Identify the areas where you as founder must remain involved versus those that can be delegated. Create a transition plan for shifting your focus.'
+                        },
+                        {
+                            title: 'Sustainable Scaling',
+                            description: 'Establish the pace and approach to scaling that aligns with your wellbeing, purpose, and vision. Create feedback loops to monitor founder sustainability.'
+                        }
+                    ]
+                },
+                'values-driven-leadership': {
+                    title: 'Values-Driven Leadership',
+                    description: 'Building a team culture aligned with your core values',
+                    expert: 'Liam McDowell',
+                    steps: [
+                        {
+                            title: 'Values Clarification',
+                            description: 'Articulate your core values with specific behaviors that demonstrate them in action. Create clear definitions that team members can understand and apply.'
+                        },
+                        {
+                            title: 'Values-Based Hiring',
+                            description: 'Develop interview processes that assess values alignment alongside skills and experience. Create scenarios and questions that reveal values in action.'
+                        },
+                        {
+                            title: 'Cultural Systems',
+                            description: 'Build rituals, recognition systems, and practices that reinforce and celebrate values-aligned behaviors throughout the organization.'
+                        },
+                        {
+                            title: 'Values-Led Decision Making',
+                            description: 'Create frameworks for making decisions that explicitly incorporate values consideration. Train team members to use these frameworks.'
+                        },
+                        {
+                            title: 'Values Feedback Loops',
+                            description: 'Establish regular check-ins and assessments of how well the organization is living its values. Use feedback to continuously refine cultural systems.'
+                        }
+                    ]
+                },
+                'balanced-scaling': {
+                    title: 'Balanced Scaling',
+                    description: 'Growing your business without sacrificing founder wellbeing',
+                    expert: 'Philip Gault',
+                    steps: [
+                        {
+                            title: 'Sustainable Growth Assessment',
+                            description: 'Evaluate current growth approach and identify areas of unsustainable pressure. Determine the optimal pace that balances ambition with wellbeing.'
+                        },
+                        {
+                            title: 'Resource Planning',
+                            description: 'Map the people, systems, and support needed to grow without overwhelming founders. Create hiring and development plans to fill capability gaps.'
+                        },
+                        {
+                            title: 'Founder Support System',
+                            description: 'Build a network of advisors, peers, and professional support to sustain founders through scaling challenges. Establish regular reflection practices.'
+                        },
+                        {
+                            title: 'Wellbeing Integration',
+                            description: 'Incorporate founder wellbeing metrics alongside business metrics in regular reviews. Create early warning systems for potential burnout.'
+                        },
+                        {
+                            title: 'Strategic Time Investment',
+                            description: 'Design a founder calendar that allocates time strategically across business growth, personal development, and renewal. Protect essential non-work time.'
+                        }
+                    ]
+                }
+            },
+            teamData: {
+                'iyas': {
+                    name: 'Iyas AlQasem',
+                    role: 'Founder',
+                    bio: 'Iyas has led companies from 2-person startup to 500 employees, through plateaus, rapid growth, acquisitions, IPO, and a high 8-figure trade-sale. He set up a charity that's helped thousands of children in refugee camps, under occupation and in war zones. Today, with Beyond the Quarter, he supports entrepreneurs and leaders in building remarkable companies that lead with purpose and values, are profitable, create positive impact, and are fun to work in.',
+                    expertise: ['Business Growth', 'Purpose Integration', 'Strategic Leadership', 'Founder Sustainability']
+                },
+                'liam': {
+                    name: 'Liam McDowell',
+                    role: 'Managing Partner',
+                    bio: 'Liam is Managing Partner at Beyond the Quarter, the consultancy for scaling purpose-led companies. He is also the host of the Karmic Capitalist podcast on leading with values and purpose. Liam has deep expertise in helping founders who are seeking to balance growth with purpose, ensuring their companies maintain their soul while scaling effectively. He frequently speaks on topics of purpose-driven leadership and sustainable business models.',
+                    expertise: ['Purpose-Led Growth', 'Values-Driven Leadership', 'Sustainable Business Models', 'Strategic Communication']
+                },
+                'philip': {
+                    name: 'Philip Gault',
+                    role: 'Growth Strategist',
+                    bio: 'Philip specializes in helping purpose-led founders scale their businesses while maintaining their values and founder wellbeing. With extensive experience working with growth-stage companies, Philip has developed frameworks that enable sustainable scaling without the typical burnout and purpose-disconnect that often accompanies rapid expansion. His balanced approach integrates financial growth with founder development and organizational health.',
+                    expertise: ['Sustainable Scaling', 'Founder Development', 'Growth Strategy', 'Team Building']
+                }
+            },
+            blogData: {
+                'bad-news': {
+                    title: 'Bad News May Sell, But It Doesn't Make Things Better',
+                    date: 'May 5, 2025',
+                    author: 'Liam McDowell',
+                    content: `<p>What do you do if the prevailing business "sense" is saying one thing, yet your values and what the world needs are in diametric opposition to this?</p>
+                    <p>That's the dilemma faced by many purpose-driven founders, and it's exemplified in the story of Positive News - a publication that chose purpose over convention.</p>
+                    <p>Founded by a 70-year-old woman from her kitchen table who believed people should know about the good in the world, Positive News has grown into a high-quality magazine with a significant online presence reaching over 2.5 million people.</p>
+                    <p>Led today by CEO Seán Wood, Positive News demonstrates what's possible when you follow your values even when conventional business wisdom suggests otherwise.</p>
+                    <p>Their journey offers valuable lessons for founders navigating the tension between business pragmatism and purpose-driven idealism:</p>
+                    <ol>
+                        <li><strong>Having conviction in your purpose</strong> - Even when conventional wisdom says it won't work</li>
+                        <li><strong>Managing pivots while retaining loyal supporters</strong> - Evolving while keeping your core community engaged</li>
+                        <li><strong>Finding the business model that serves your mission</strong> - Rather than compromising mission for the model</li>
+                        <li><strong>Building a team aligned with purpose</strong> - Creating cultural systems that reinforce your values</li>
+                    </ol>
+                    <p>The story of Positive News reminds us that business success doesn't have to come at the expense of making a positive difference. In fact, for many consumers today, the two are increasingly inseparable.</p>`
+                },
+                'small-giants': {
+                    title: 'Small Giants: Choosing Greatness Over Growth',
+                    date: 'April 28, 2025',
+                    author: 'Liam McDowell',
+                    content: `<p>Bo Burlingham's excellent book, "Small Giants", charts the stories of companies for whom being great is more important than being big.</p>
+                    <p>In each case, the founders or CEOs faced very real choices between following tried and tested growth paths or doing something different and keeping their mojo. Sometimes, that meant rejecting mouth-watering exits. But they consistently chose greatness.</p>
+                    <p>For them, having a company with a soul was more important than entry stakes to the billionaire space-race. Which is one reason why we gift this book A LOT!</p>
+                    <p>Key patterns observed among these "Small Giants" include:</p>
+                    <ol>
+                        <li><strong>Clarity of purpose</strong> - The leaders or founders had clarity on who they were, what they wanted and why</li>
+                        <li><strong>Community connection</strong> - They created intimate relationships with the communities in which they worked, including customers</li>
+                        <li><strong>People-first approach</strong> - Employees always came first</li>
+                        <li><strong>Financial independence</strong> - They figured out how to maintain control over their destiny</li>
+                    </ol>
+                    <p>These companies remind us that growth for growth's sake can often kill what made a business special in the first place. Instead, they opted for a more balanced approach that preserved their unique culture and purpose while still achieving remarkable success on their own terms.</p>`
+                },
+                'distributed-workforce': {
+                    title: 'The Distributed Workforce: Beyond Remote Work',
+                    date: 'April 15, 2025',
+                    author: 'Liam McDowell',
+                    content: `<p>Nearly all companies have been forced to wake up to the distributed workforce model over the past few years. However, the word 'distributed' is far more encompassing than simply having your team join the monthly management meeting from their breakfast table.</p>
+                    <p>A truly distributed workforce requires a fundamental rethinking of:</p>
+                    <ul>
+                        <li><strong>People practices</strong> - How we hire, develop, and engage team members without physical proximity</li>
+                        <li><strong>Process design</strong> - Creating workflows that don't rely on physical presence or synchronous communication</li>
+                        <li><strong>Technology infrastructure</strong> - Building systems that enable seamless collaboration across time zones and geographies</li>
+                        <li><strong>Cultural cohesion</strong> - Maintaining strong values and connections without traditional office interactions</li>
+                    </ul>
+                    <p>The most successful distributed companies have moved beyond simple remote work policies to create entirely new operating models designed for a world where talent and contribution are unconstrained by location.</p>
+                    <p>This shift represents both challenge and opportunity for purpose-led founders. On one hand, it requires rethinking established practices. On the other, it opens up possibilities for building more inclusive, flexible organizations that can attract diverse talent from anywhere in the world.</p>
+                    <p>The key is approaching distribution not as a compromise or temporary measure, but as a strategic advantage to be designed for intentionally.</p>`
+                },
+                'business-serves-humanity': {
+                    title: 'Building a Business that Serves Humanity',
+                    date: 'April 3, 2025',
+                    author: 'Iyas AlQasem',
+                    content: `<p>Beyond the Quarter's mission is to create a world where Business serves Humanity rather than People serving Business.</p>
+                    <p>We believe that business is a part of the human experience - a tool we've created to solve problems, meet needs, and create value. Yet somehow, over time, the relationship has often become inverted, with human needs subordinated to business imperatives.</p>
+                    <p>Reclaiming the proper relationship between business and humanity requires a fundamental shift in how we approach business building:</p>
+                    <ol>
+                        <li><strong>Purpose as foundation</strong> - Starting with a clear articulation of how the business serves human needs</li>
+                        <li><strong>Values as operating system</strong> - Creating decision frameworks that prioritize human wellbeing alongside financial metrics</li>
+                        <li><strong>Systems for sustainability</strong> - Building processes that enable business success without burning out the humans who power it</li>
+                        <li><strong>Impact measurement</strong> - Tracking how effectively the business is serving humanity, not just financial performance</li>
+                    </ol>
+                    <p>This approach doesn't mean abandoning commercial success - quite the opposite. Companies that authentically serve human needs tend to build stronger customer relationships, more engaged teams, and greater resilience during challenges.</p>
+                    <p>The question for founders isn't whether to choose purpose or profit, but how to ensure that profit is generated through genuinely serving human needs and creating positive impact.</p>`
+                },
+                'beyond-quarter': {
+                    title: 'Thinking Beyond the Quarter',
+                    date: 'March 22, 2025',
+                    author: 'Iyas AlQasem',
+                    content: `<p>The pressure of quarterly thinking has become one of the greatest obstacles to building businesses that are both commercially successful and socially impactful.</p>
+                    <p>When decisions are driven primarily by short-term financial metrics, companies often sacrifice the very things that create sustainable value over time:</p>
+                    <ul>
+                        <li>Investment in team development and wellbeing</li>
+                        <li>Building deep, trust-based customer relationships</li>
+                        <li>Creating systems for long-term sustainability</li>
+                        <li>Innovating for meaningful impact rather than quick wins</li>
+                    </ul>
+                    <p>Thinking beyond the quarter doesn't mean ignoring financial performance or accountability. Rather, it means expanding the timeframe and metrics through which we evaluate business success.</p>
+                    <p>For founders, this means:</p>
+                    <ol>
+                        <li><strong>Defining success holistically</strong> - Creating dashboards that include purpose, people, and planet alongside profit</li>
+                        <li><strong>Building the right capital relationships</strong> - Working with investors who share your longer-term perspective</li>
+                        <li><strong>Creating balanced feedback loops</strong> - Ensuring that long-term metrics get as much attention as short-term ones</li>
+                        <li><strong>Communicating the full story</strong> - Helping stakeholders understand how short-term trade-offs create long-term value</li>
+                    </ol>
+                    <p>The businesses that will thrive in the coming decades will be those that successfully balance quarterly discipline with generational thinking - creating value that endures far beyond the next earnings report.</p>`
+                },
+                'karmic-capitalist': {
+                    title: 'The Karmic Capitalist Approach',
+                    date: 'March 10, 2025',
+                    author: 'Liam McDowell',
+                    content: `<p>The concept of Karmic Capitalism represents a fundamental shift in how we think about business success - moving from extraction to contribution as the core metric.</p>
+                    <p>Traditional capitalism focuses primarily on value capture - how much wealth can be extracted from market activities. Karmic Capitalism focuses instead on value creation - how much positive impact can be generated through business activities, with the belief that commercial success will follow meaningful contribution.</p>
+                    <p>The core principles of this approach include:</p>
+                    <ol>
+                        <li><strong>Purpose beyond profit</strong> - Starting with a clear articulation of the positive impact the business aims to create</li>
+                        <li><strong>Values-driven decision making</strong> - Using core values as filters for all major business choices</li>
+                        <li><strong>Stakeholder orientation</strong> - Considering impacts on all stakeholders, not just shareholders</li>
+                        <li><strong>Regenerative practices</strong> - Aiming to leave people, communities and ecosystems better than you found them</li>
+                        <li><strong>Long-term perspective</strong> - Building for enduring impact rather than quick exits</li>
+                    </ol>
+                    <p>Companies practicing Karmic Capitalism don't shy away from commercial success - they simply recognize that in a connected world, what you put out comes back to you. By creating genuine value for others, they build the foundation for sustainable financial returns.</p>
+                    <p>This approach is particularly resonant with younger consumers and employees who increasingly expect businesses to contribute positively to society while achieving commercial success.</p>`
+                }
+            }
+        };
+        
+        // DOM Elements
+        const onboardingScreen = document.getElementById('onboarding-screen');
+        const mainApp = document.getElementById('main-app');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        
+        // Onboarding functions
+        function continueOnboarding() {
+            if (state.currentStep === 1) {
+                // Capture user info
+                state.userName = document.getElementById('onboarding-name').value || 'User';
+                state.userEmail = document.getElementById('onboarding-email').value || 'user@example.com';
+                state.userBusiness = document.getElementById('onboarding-business').value || 'Your Business';
+                
+                // Move to main app
+                onboardingScreen.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                
+                // Update profile info
+                document.getElementById('profile-name').textContent = state.userName;
+                document.getElementById('profile-business').textContent = state.userBusiness;
+                
+                // Add greeting message
+                addMessage('assistant', `Welcome, ${state.userName}! I'm your founder coach from Beyond the Quarter. I'm here to help you build a purpose-driven business that's sustainable for you personally and can scale effectively. What founder challenges are you facing right now?`);
+            }
+        }
+        
+        // Navigation functions
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Update the active state in the sidebar
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding sidebar item
+            const tabIndex = ['chat', 'insights', 'playbooks', 'blog', 'team', 'settings'].indexOf(tabName);
+            if (tabIndex >= 0) {
+                document.querySelectorAll('.sidebar-item')[tabIndex].classList.add('active');
+            }
+        }
+        
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+        
+        function showPlaybookDetail(playbookId) {
+            const playbook = state.playbookData[playbookId];
+            if (!playbook) return;
+            
+            document.getElementById('playbook-modal-title').textContent = playbook.title;
+            
+            let content = `
+                <p style="color: #3b82f6; margin-bottom: 8px;">Expert: ${playbook.expert}</p>
+                <p style="margin-bottom: 16px;">${playbook.description}</p>
+                <h3 style="font-size: 18px; font-weight: 600; margin: 24px 0 16px 0;">Implementation Steps</h3>
+            `;
+            
+            playbook.steps.forEach((step, index) => {
+                content += `
+                    <div style="margin-bottom: 16px; padding-bottom: 16px; ${index < playbook.steps.length - 1 ? 'border-bottom: 1px solid #e5e7eb;' : ''}">
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="width: 24px; height: 24px; background-color: #dbeafe; color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; margin-right: 12px;">
+                                ${index + 1}
+                            </div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin: 0;">${step.title}</h4>
+                        </div>
+                        <p style="margin: 0 0 0 36px; color: #4b5563;">${step.description}</p>
+                    </div>
+                `;
+            });
+            
+            content += `
+                <div style="margin-top: 24px; display: flex; justify-content: space-between;">
+                    <button class="btn btn-secondary" onclick="addToChatFromPlaybook('${playbookId}')">Discuss in Chat</button>
+                    <button class="btn btn-primary" onclick="scheduleCallFromPlaybook('${playbookId}')">Get Expert Help</button>
+                </div>
+            `;
+            
+            document.getElementById('playbook-modal-content').innerHTML = content;
+            showModal('playbook-modal');
+        }
+        
+        function showTeamMember(memberId) {
+            const member = state.teamData[memberId];
+            if (!member) return;
+            
+            document.getElementById('team-profile-modal-title').textContent = member.name;
+            
+            let content = `
+                <div style="margin-bottom: 16px;">
+                    <div style="height: 120px; background-color: #e5e7eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div style="color: #3b82f6; font-size: 14px; margin-bottom: 4px;">${member.role}</div>
+                    <h3 style="font-size: 20px; font-weight: 600; margin: 0 0 12px 0;">${member.name}</h3>
+                    <p style="color: #4b5563; margin-bottom: 16px;">${member.bio}</p>
+                </div>
+                
+                <h4 style="font-size: 16px; font-weight: 600; margin: 0 0 12px 0;">Areas of Expertise</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+            `;
+            
+            member.expertise.forEach(area => {
+                content += `
+                    <span style="background-color: #dbeafe; color: #3b82f6; padding: 4px 12px; border-radius: 9999px; font-size: 14px;">
+                        ${area}
+                    </span>
+                `;
+            });
+            
+            content += `
+                </div>
+                
+                <div style="display: flex; justify-content: center; margin-top: 16px;">
+                    <button class="btn btn-primary" onclick="scheduleCall('${memberId}')">Schedule a Call</button>
+                </div>
+            `;
+            
+            document.getElementById('team-profile-modal-content').innerHTML = content;
+            showModal('team-profile-modal');
+        }
+        
+        function showBlogPost(postId) {
+            const post = state.blogData[postId];
+            if (!post) return;
+            
+            document.getElementById('blog-modal-title').textContent = post.title;
+            
+            let content = `
+                <div style="margin-bottom: 16px;">
+                    <div style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${post.date}</div>
+                    <p style="font-style: italic; margin: 0 0 16px 0;">By ${post.author}</p>
+                    <div>${post.content}</div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+                    <button class="btn btn-secondary" onclick="addToChatFromBlog('${postId}')">Discuss in Chat</button>
+                    <button class="btn btn-primary" onclick="sharePost('${postId}')">Share Article</button>
+                </div>
+            `;
+            
+            document.getElementById('blog-modal-content').innerHTML = content;
+            showModal('blog-modal');
+        }
+        
+        // Chat functions
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage('user', message);
+            messageInput.value = '';
+            
+            // Process message and generate response
+            processMessage(message);
+        }
+        
+        function addMessage(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'message-header';
+            headerDiv.textContent = role === 'user' ? state.userName : 'Beyond the Quarter';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.innerHTML = content;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.style.fontSize = '12px';
+            timeDiv.style.color = '#9ca3af';
+            timeDiv.style.marginTop = '8px';
+            const now = new Date();
+            timeDiv.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            messageDiv.appendChild(headerDiv);
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function processMessage(message) {
+            // Simple keyword-based responses
+            setTimeout(() => {
+                if (message.toLowerCase().includes('founder') || message.toLowerCase().includes('depend')) {
+                    addMessage('assistant', `
+                        I've identified that you might be experiencing a Founder Dependency challenge. This is common for founders at your stage.
+                        <br><br>
+                        Let me ask you a few questions to better understand your situation:
+                        <br><br>
+                        1. On a scale of 0-10, how dependent is your business on you for day-to-day decisions?
+                        <br><br>
+                        2. What areas of the business would suffer most if you were unavailable for a month?
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                            <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <div>
+                                    <div style="font-weight: 500; color: #3b82f6;">Breaking Founder Dependence</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Step-by-step process to move from founder-led to systems-driven</div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-left: auto;" onclick="showPlaybookDetail('founder-independence')">View</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startDiagnostic('founder-dependency')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Founder Dependency Diagnostic</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showPlaybookDetail('founder-independence')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <span>View Breaking Founder Dependence Framework</span>
+                            </button>
+                        </div>
+                    `);
+                } else if (message.toLowerCase().includes('profile') || message.toLowerCase().includes('evolve') || message.toLowerCase().includes('role')) {
+                    addMessage('assistant', `
+                        Your founder profile and evolution is crucial to your business's success. To help you develop a clear profile, I'd like to understand:
+                        <br><br>
+                        1. What aspects of your founder role energize you the most?
+                        <br><br>
+                        2. What aspects drain your energy or feel misaligned with your strengths?
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                            <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <div>
+                                    <div style="font-weight: 500; color: #3b82f6;">Founder Profile Development</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Create your comprehensive founder profile for strategic growth</div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-left: auto;" onclick="showPlaybookDetail('founder-profile')">View</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startDiagnostic('founder-profile')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Founder Profile Diagnostic</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showPlaybookDetail('founder-profile')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <span>View Founder Profile Framework</span>
+                            </button>
+                        </div>
+                    `);
+                } else if (message.toLowerCase().includes('scale') || message.toLowerCase().includes('grow')) {
+                    addMessage('assistant', `
+                        Preparing yourself as a founder for business scaling is crucial. I'd like to understand your scale readiness better:
+                        <br><br>
+                        1. What are your biggest personal concerns about scaling the business?
+                        <br><br>
+                        2. How would you rate your current systems and team's readiness for growth?
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                            <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <div>
+                                    <div style="font-weight: 500; color: #3b82f6;">Scale-Ready Founder</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Prepare yourself as a founder for business scaling</div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-left: auto;" onclick="showPlaybookDetail('scale-ready-founder')">View</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startDiagnostic('scale-readiness')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Scale Readiness Assessment</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showPlaybookDetail('scale-ready-founder')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <span>View Scale-Ready Founder Framework</span>
+                            </button>
+                        </div>
+                    `);
+                } else if (message.toLowerCase().includes('burnout') || message.toLowerCase().includes('stress') || message.toLowerCase().includes('overwhelm')) {
+                    addMessage('assistant', `
+                        Founder burnout is a critical challenge that affects both your wellbeing and business success. Let's explore this further:
+                        <br><br>
+                        1. What are the primary sources of stress or overwhelm in your founder role right now?
+                        <br><br>
+                        2. What sustainable practices have worked for you in the past to maintain your energy and motivation?
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                            <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <div>
+                                    <div style="font-weight: 500; color: #3b82f6;">Balanced Scaling</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Growing your business without sacrificing founder wellbeing</div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-left: auto;" onclick="showPlaybookDetail('balanced-scaling')">View</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startDiagnostic('founder-wellbeing')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Founder Wellbeing Assessment</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showTeamMember('philip')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span>Speak with Our Wellbeing Expert</span>
+                            </button>
+                        </div>
+                    `);
+                } else if (message.toLowerCase().includes('purpose') || message.toLowerCase().includes('value') || message.toLowerCase().includes('mission')) {
+                    addMessage('assistant', `
+                        Purpose and values are the foundation of sustainable business success. I'd like to understand yours better:
+                        <br><br>
+                        1. What motivated you to start your business in the first place?
+                        <br><br>
+                        2. To what extent do you feel your current business operations reflect that original purpose?
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                            <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <div>
+                                    <div style="font-weight: 500; color: #3b82f6;">Purpose Beyond Posters</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Embedding purpose into business operations</div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-left: auto;" onclick="showPlaybookDetail('purpose-integration')">View</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startDiagnostic('purpose-alignment')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Purpose Alignment Assessment</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showTeamMember('liam')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span>Speak with Our Purpose Expert</span>
+                            </button>
+                        </div>
+                    `);
+                } else {
+                    addMessage('assistant', `
+                        I'm here to help you on your founder journey to build a purpose-driven, values-led business that's sustainable for you personally and can scale effectively.
+                        <br><br>
+                        To provide specific guidance, it would help to understand your current founder challenges. Are you experiencing challenges with:
+                        <br><br>
+                        - Founder dependency or delegation<br>
+                        - Work-life balance or sustainability<br>
+                        - Purpose and values integration<br>
+                        - Your evolving role as founder
+                        <br><br>
+                        Let me know which area you'd like to focus on, and I can provide targeted guidance and frameworks.
+                        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startComprehensiveDiagnostic()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span>Complete Founder Profile</span>
+                            </button>
+                            <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="showTab('playbooks')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <span>Explore All Frameworks</span>
+                            </button>
+                        </div>
+                    `);
+                }
+            }, 1000);
+        }
+        
+        // Other interaction functions
+        function addToChatFromPlaybook(playbookId) {
+            const playbook = state.playbookData[playbookId];
+            if (!playbook) return;
+            
+            closeModal('playbook-modal');
+            addMessage('user', `I'd like to learn more about the ${playbook.title} framework.`);
+            
+            setTimeout(() => {
+                addMessage('assistant', `
+                    Great choice! The ${playbook.title} framework helps with ${playbook.description.toLowerCase()}. Let me walk you through the key steps:
+                    <br><br>
+                    1. <strong>${playbook.steps[0].title}</strong>: ${playbook.steps[0].description}
+                    <br><br>
+                    2. <strong>${playbook.steps[1].title}</strong>: ${playbook.steps[1].description}
+                    <br><br>
+                    3. <strong>${playbook.steps[2].title}</strong>: ${playbook.steps[2].description}
+                    <br><br>
+                    4. <strong>${playbook.steps[3
 ].title}</strong>: ${playbook.steps[3].description}
                     <br><br>
                     5. <strong>${playbook.steps[4].title}</strong>: ${playbook.steps[4].description}
