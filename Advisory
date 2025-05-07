@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond the Quarter - Founder Profile Platform</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            font-weight: 600;
+        }
+        
+        /* Header */
+        header {
+            background-color: #1c1917;
+            color: white;
+            padding: 16px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #4b5563;
+            color: white;
+        }
+        
+        /* Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 64px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 64px;
+            background-color: #1c1917;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        
+        .sidebar-item {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+        }
+        
+        .sidebar-item.active {
+            background-color: #3b82f6;
+        }
+        
+        .sidebar-item:hover:not(.active) {
+            background-color: #4b5563;
+        }
+        
+        /* Main content */
+        .main-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Chat */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .message.user {
+            background-color: #dbeafe;
+            align-self: flex-end;
+        }
+        
+        .message.assistant {
+            background-color: white;
+            align-self: flex-start;
+        }
+        
+        .message-header {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .chat-input {
+            padding: 16px;
+            border-top: 1px solid #e5e7eb;
+            background-color: white;
+        }
+        
+        .input-container {
+            display: flex;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .input-container textarea {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            outline: none;
+            resize: none;
+            min-height: 24px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .send-button {
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+        }
+        
+        /* Onboarding */
+        .onboarding {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+        }
+        
+        .onboarding-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+        }
+        
+        .onboarding-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        
+        .progress-container {
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            width: 33%;
+            transition: width 0.3s ease;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+        
+        /* Playbooks */
+        .playbooks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+        
+        .playbook-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .playbook-content {
+            padding: 16px;
+        }
+        
+        .playbook-category {
+            color: #3b82f6;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .playbook-expert {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+        
+        .playbook-footer {
+            padding: 12px 16px;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Insights */
+        .insights-container {
+            padding: 24px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .insights-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+        }
+        
+        .insights-card.full-width {
+            grid-column: span 2;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .insights-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .insights-value {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        .impact-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .impact-high {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .impact-medium {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .risk-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-number {
+            width: 24px;
+            height: 24px;
+            background-color: #dbeafe;
+            color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .journey-timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #e5e7eb;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -32px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            z-index: 1;
+        }
+        
+        .timeline-marker.future {
+            background-color: #d1d5db;
+        }
+        
+        .timeline-content {
+            background-color: #dbeafe;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        
+        .timeline-content.future {
+            background-color: #f3f4f6;
+        }
+        
+        /* Utility classes */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Onboarding screen - show this initially -->
+    <div class="onboarding" id="onboarding-screen">
+        <div class="onboarding-card">
+            <div class="onboarding-header">
+                <div class="logo-icon">B</div>
+                <div style="margin-left: 12px;">
+                    <h1 style="margin: 0; font-size: 24px;">Beyond the Quarter</h1>
+                    <p style="margin: 0; font-size: 14px; color: #6b7280;">Founder Profile Platform</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="flex items-center justify-between mb-2">
+                    <span style="font-size: 14px; font-weight: 500; color: #6b7280;">Step 1 of 3</span>
+                    <span style="font-size: 14px; color: #6b7280;">Your Info</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 33%;"></div>
+                </div>
+            </div>
+            
+            <h2 style="font-size: 20px; margin-top: 0; margin-bottom: 16px;">Let's get started</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" class="form-input" placeholder="Enter your name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Business Name</label>
+                <input type="text" class="form-input" placeholder="Enter your business name">
+            </div>
+            
+            <div class="form-actions">
+                <div></div> <!-- Empty div for spacing -->
+                <button class="btn btn-primary" onclick="showMainApp()">Continue</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main app UI -->
+    <div class="app-container hidden" id="main-app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">B</div>
+                    <div>
+                        <h1 style="margin: 0; font-size: 20px;">Beyond the Quarter</h1>
+                        <p style="margin: 0; font-size: 12px; color: #d1d5db;">Founder Profile Platform</p>
+                    </div>
+                </div>
+                <div class="header-buttons">
+                    <button class="btn btn-primary">Speak to Iyas</button>
+                    <button class="btn btn-secondary">My Account</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-layout">
+            <div class="sidebar">
+                <div class="sidebar-item active" onclick="showTab('chat')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('insights')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="sidebar-item" onclick="showTab('playbooks')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                </div>
+                <div style="flex: 1;"></div>
+                <div class="sidebar-item" onclick="showTab('settings')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <!-- Chat Tab (Default) -->
+                <div class="tab-content" id="chat-tab">
+                    <div class="chat-container">
+                        <div class="chat-messages">
+                            <div class="message assistant">
+                                <div class="message-header">Beyond the Quarter</div>
+                                <div>
+                                    Welcome to Beyond the Quarter's Founder Profile Platform. I'm here to help you build a meaningful, profitable, and sustainable business—starting with you as the founder. How can I help you on your founder journey today?
+                                </div>
+                            </div>
+                            
+                            <div class="message user">
+                                <div class="message-header">You</div>
+                                <div>
+                                    I feel like my business is too dependent on me. Everything seems to go through me and I'm getting burnt out.
+                                </div>
+                            </div>
+                            
+                            <div class="message assistant">
+                                <div class="message-header">Beyond the Quarter</div>
+                                <div>
+                                    I've identified that you're experiencing a Founder Dependency challenge. This is common for founders at your stage.
+                                    <br><br>
+                                    Let me ask you a few questions to better understand your situation:
+                                    <br><br>
+                                    1. On a scale of 0-10, how dependent is your business on you for day-to-day decisions?
+                                    <br><br>
+                                    2. What areas of the business would suffer most if you were unavailable for a month?
+                                </div>
+                                
+                                <!-- Recommended Framework -->
+                                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
+                                    <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                        <div>
+                                            <div style="font-weight: 500; color: #3b82f6;">Breaking Founder Dependence</div>
+                                            <div style="font-size: 12px; color: #6b7280;">Step-by-step process to move from founder-led to systems-driven</div>
+                                        </div>
+                                        <button class="btn btn-primary" style="margin-left: auto;" onclick="showTab('playbooks')">View</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                                    <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                        </svg>
+                                        <span>Founder Dependency Diagnostic</span>
+                                    </button>
+                                    <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px;" onclick="showTab('playbooks')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                        <span>View Breaking Founder Dependence Framework</span>
+                                    </button>
+                                </div>
+                                
+                                <div style="font-size: 12px; color: #9ca3af; margin-top: 8px;">10:35 AM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <div class="input-container">
+                                <textarea placeholder="Type your message here..." rows="1"></textarea>
+                                <button class="send-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 8px;">Press Enter to send, Shift+Enter for new line</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insights Tab -->
+                <div class="tab-content hidden" id="insights-tab">
+                    <div class="insights-container">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Insights</h2>
+                        
+                        <div class="insights-grid">
+                            <!-- Challenge Analysis -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Founder Challenge</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Primary Challenge</div>
+                                    <div class="insights-value">Founder Dependency</div>
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Impact Level</div>
+                                    <div class="impact-badge impact-high">High</div>
+                                </div>
+                                <div>
+                                    <div class="insights-label" style="margin-bottom: 8px;">Risk Areas</div>
+                                    <div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Business continuity</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Growth ceiling</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Founder sustainability</div>
+                                        </div>
+                                        <div class="risk-item">
+                                            <div class="risk-dot"></div>
+                                            <div>Operational reliability</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Recommendations</h3>
+                                <div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">1</div>
+                                        <div>Document key decision frameworks</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">2</div>
+                                        <div>Develop and empower leadership team</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">3</div>
+                                        <div>Create systems for knowledge transfer</div>
+                                    </div>
+                                    <div class="recommendation-item">
+                                        <div class="recommendation-number">4</div>
+                                        <div>Implement progressive delegation plan</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 24px;">
+                                    <button class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;" onclick="showTab('playbooks')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                        <span>View Recommended Frameworks</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Founder Journey -->
+                            <div class="insights-card full-width">
+                                <h3 class="insights-title">Founder Journey</h3>
+                                <div class="journey-timeline">
+                                    <div class="timeline-line"></div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div style="font-weight: 500;">Current: Hands-On Operator</div>
+                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
+                                                You are deeply involved in day-to-day operations and most decisions run through you
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker future"></div>
+                                        <div class="timeline-content future">
+                                            <div style="font-weight: 500;">Next: Strategic Leader</div>
+                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
+                                                You're focused on strategic direction while your team handles operations
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Playbooks Tab -->
+                <div class="tab-content hidden" id="playbooks-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Frameworks</h2>
+                        
+                        <div class="playbooks-grid">
+                            <!-- Playbook 1 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Growth & Leadership</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Breaking Founder Dependence</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Step-by-step process to move from founder-led to systems-driven</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 2 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Growth & Leadership</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Purpose Beyond Posters</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Embedding purpose into business operations</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 3 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Founder Journey</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Founder Profile Development</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Create your comprehensive founder profile for strategic growth</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary">View Framework</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Playbook 4 -->
+                            <div class="playbook-card">
+                                <div class="playbook-content">
+                                    <div class="playbook-category">Founder Journey</div>
+                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Scale-Ready Founder</h3>
+                                    <p style="color: #6b7280; margin-bottom: 16px;">Prepare yourself as a founder for business scaling</p>
+                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
+                                </div>
+                                <div class="playbook-footer">
+                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
+                                    <button class="btn btn-primary">View Framework</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="tab-content hidden" id="settings-tab">
+                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Settings</h2>
+                        
+                        <div class="insights-grid">
+                            <!-- Profile Card -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Founder Profile</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Name</div>
+                                    <div style="font-weight: 500;">Your Name</div>
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <div class="insights-label">Business</div>
+                                    <div style="font-weight: 500;">Your Business</div>
+                                </div>
+                                <div>
+                                    <div class="insights-label">Membership Level</div>
+                                    <div style="font-weight: 500;">Founder Profile (Basic)</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preferences Card -->
+                            <div class="insights-card">
+                                <h3 class="insights-title">Preferences</h3>
+                                <div style="margin-bottom: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-weight: 500;">Save Conversation History</span>
+                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative;">
+                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 14px; color: #6b7280;">
+                                        Allow platform to remember our conversations
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-weight: 500;">Proactive Founder Insights</span>
+                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative;">
+                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 14px; color: #6b7280;">
+                                        Enable proactive founder journey insights
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Founder Journey Details Card -->
+                            <div class="insights-card full-width">
+                                <h3 class="insights-title">Founder Journey Details</h3>
+                                <div style="display: grid; gap: 16px;">
+                                    <div>
+                                        <label class="form-label">Business Revenue</label>
+                                        <select class="form-input">
+                                            <option>£0 - £100K</option>
+                                            <option>£100K - £500K</option>
+                                            <option selected>£500K - £1M</option>
+                                            <option>£1M - £3M</option>
+                                            <option>£3M - £8M</option>
+                                            <option>£8M+</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Primary Founder Challenge</label>
+                                        <select class="form-input">
+                                            <option selected>Founder Dependency</option>
+                                            <option>Founder Burnout Risk</option>
+                                            <option>Purpose Disconnect</option>
+                                            <option>Founder Role Evolution</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Founder Purpose (Optional)</label>
+                                        <textarea class="form-input" style="height: 96px;" placeholder="Why did you become a founder?"></textarea>
+                                    </div>
+                                    <div style="padding-top: 16px;">
+                                        <button class="btn btn-primary">Update Profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simple navigation between onboarding and main app
+        function showMainApp() {
+            document.getElementById('onboarding-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+        }
+        
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Update the active state in the sidebar
+            document.querySelectorAll('.sidebar-item').forEach((item, index) => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding sidebar item
+            const tabIndex = ['chat', 'insights', 'playbooks', 'settings'].indexOf(tabName);
+            document.querySelectorAll('.sidebar-item')[tabIndex].classList.add('active');
+        }
+    </script>
+</body>
+</html>
