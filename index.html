@@ -1,917 +1,323 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beyond the Quarter - Founder Profile Platform</title>
-    <style>
-        /* Base styles */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9fafb;
-            color: #111827;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        h1, h2, h3, h4 {
-            font-weight: 600;
-        }
-        
-        /* Header */
-        header {
-            background-color: #1c1917;
-            color: white;
-            padding: 16px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #3b82f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .header-buttons {
-            display: flex;
-            gap: 16px;
-        }
-        
-        /* Buttons */
-        .btn {
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background-color: #3b82f6;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background-color: #4b5563;
-            color: white;
-        }
-        
-        /* Layout */
-        .main-layout {
-            display: flex;
-            height: calc(100vh - 64px);
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            width: 64px;
-            background-color: #1c1917;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
-        
-        .sidebar-item {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-            border-radius: 9999px;
-            cursor: pointer;
-        }
-        
-        .sidebar-item.active {
-            background-color: #3b82f6;
-        }
-        
-        .sidebar-item:hover:not(.active) {
-            background-color: #4b5563;
-        }
-        
-        /* Main content */
-        .main-content {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Chat */
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .message {
-            max-width: 80%;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .message.user {
-            background-color: #dbeafe;
-            align-self: flex-end;
-        }
-        
-        .message.assistant {
-            background-color: white;
-            align-self: flex-start;
-        }
-        
-        .message-header {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .chat-input {
-            padding: 16px;
-            border-top: 1px solid #e5e7eb;
-            background-color: white;
-        }
-        
-        .input-container {
-            display: flex;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: white;
-        }
-        
-        .input-container textarea {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            outline: none;
-            resize: none;
-            min-height: 24px;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        
-        .send-button {
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            color: #3b82f6;
-            cursor: pointer;
-        }
-        
-        /* Onboarding */
-        .onboarding {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f9fafb;
-        }
-        
-        .onboarding-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 32px;
-            width: 100%;
-            max-width: 480px;
-        }
-        
-        .onboarding-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-        
-        .progress-container {
-            margin-bottom: 24px;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background-color: #e5e7eb;
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background-color: #3b82f6;
-            width: 33%;
-            transition: width 0.3s ease;
-        }
-        
-        .form-group {
-            margin-bottom: 16px;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #4b5563;
-            margin-bottom: 4px;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 24px;
-        }
-        
-        /* Playbooks */
-        .playbooks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-            padding: 24px;
-        }
-        
-        .playbook-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .playbook-content {
-            padding: 16px;
-        }
-        
-        .playbook-category {
-            color: #3b82f6;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        
-        .playbook-expert {
-            font-size: 14px;
-            color: #6b7280;
-            margin-top: 8px;
-        }
-        
-        .playbook-footer {
-            padding: 12px 16px;
-            background-color: #f9fafb;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        /* Insights */
-        .insights-container {
-            padding: 24px;
-            overflow-y: auto;
-            height: 100%;
-        }
-        
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-        
-        .insights-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 16px;
-        }
-        
-        .insights-card.full-width {
-            grid-column: span 2;
-        }
-        
-        .insights-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-        
-        .insights-label {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-        
-        .insights-value {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 16px;
-        }
-        
-        .impact-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .impact-high {
-            background-color: #fee2e2;
-            color: #b91c1c;
-        }
-        
-        .impact-medium {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        
-        .risk-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .risk-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #3b82f6;
-            border-radius: 50%;
-        }
-        
-        .recommendation-item {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .recommendation-number {
-            width: 24px;
-            height: 24px;
-            background-color: #dbeafe;
-            color: #3b82f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        
-        .journey-timeline {
-            position: relative;
-            padding-left: 32px;
-        }
-        
-        .timeline-line {
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #e5e7eb;
-        }
-        
-        .timeline-item {
-            position: relative;
-            padding-bottom: 24px;
-        }
-        
-        .timeline-marker {
-            position: absolute;
-            left: -32px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #3b82f6;
-            z-index: 1;
-        }
-        
-        .timeline-marker.future {
-            background-color: #d1d5db;
-        }
-        
-        .timeline-content {
-            background-color: #dbeafe;
-            padding: 16px;
-            border-radius: 8px;
-        }
-        
-        .timeline-content.future {
-            background-color: #f3f4f6;
-        }
-        
-        /* Utility classes */
-        .hidden {
-            display: none !important;
-        }
-    </style>
-</head>
-<body>
-    <!-- Onboarding screen - show this initially -->
-    <div class="onboarding" id="onboarding-screen">
-        <div class="onboarding-card">
-            <div class="onboarding-header">
-                <div class="logo-icon">B</div>
-                <div style="margin-left: 12px;">
-                    <h1 style="margin: 0; font-size: 24px;">Beyond the Quarter</h1>
-                    <p style="margin: 0; font-size: 14px; color: #6b7280;">Founder Profile Platform</p>
-                </div>
-            </div>
-            
-            <div class="progress-container">
-                <div class="flex items-center justify-between mb-2">
-                    <span style="font-size: 14px; font-weight: 500; color: #6b7280;">Step 1 of 3</span>
-                    <span style="font-size: 14px; color: #6b7280;">Your Info</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 33%;"></div>
-                </div>
-            </div>
-            
-            <h2 style="font-size: 20px; margin-top: 0; margin-bottom: 16px;">Let's get started</h2>
-            
-            <div class="form-group">
-                <label class="form-label">Your Name</label>
-                <input type="text" class="form-input" placeholder="Enter your name">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" placeholder="Enter your email">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Business Name</label>
-                <input type="text" class="form-input" placeholder="Enter your business name">
-            </div>
-            
-            <div class="form-actions">
-                <div></div> <!-- Empty div for spacing -->
-                <button class="btn btn-primary" onclick="showMainApp()">Continue</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Main app UI -->
-    <div class="app-container hidden" id="main-app">
-        <header>
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">B</div>
-                    <div>
-                        <h1 style="margin: 0; font-size: 20px;">Beyond the Quarter</h1>
-                        <p style="margin: 0; font-size: 12px; color: #d1d5db;">Founder Profile Platform</p>
+].title}</strong>: ${playbook.steps[3].description}
+                    <br><br>
+                    5. <strong>${playbook.steps[4].title}</strong>: ${playbook.steps[4].description}
+                    <br><br>
+                    Would you like to implement this framework with my guidance? We can start with the first step today.
+                    <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                        <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="startImplementation('${playbookId}', 1)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            <span>Start Implementation</span>
+                        </button>
+                        <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;" onclick="scheduleCallFromPlaybook('${playbookId}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>Get Expert Help</span>
+                        </button>
                     </div>
-                </div>
-                <div class="header-buttons">
-                    <button class="btn btn-primary">Speak to Iyas</button>
-                    <button class="btn btn-secondary">My Account</button>
-                </div>
-            </div>
-        </header>
-        
-        <div class="main-layout">
-            <div class="sidebar">
-                <div class="sidebar-item active" onclick="showTab('chat')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                <div class="sidebar-item" onclick="showTab('insights')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                    </svg>
-                </div>
-                <div class="sidebar-item" onclick="showTab('playbooks')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                    </svg>
-                </div>
-                <div style="flex: 1;"></div>
-                <div class="sidebar-item" onclick="showTab('settings')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="main-content">
-                <!-- Chat Tab (Default) -->
-                <div class="tab-content" id="chat-tab">
-                    <div class="chat-container">
-                        <div class="chat-messages">
-                            <div class="message assistant">
-                                <div class="message-header">Beyond the Quarter</div>
-                                <div>
-                                    Welcome to Beyond the Quarter's Founder Profile Platform. I'm here to help you build a meaningful, profitable, and sustainable business—starting with you as the founder. How can I help you on your founder journey today?
-                                </div>
-                            </div>
-                            
-                            <div class="message user">
-                                <div class="message-header">You</div>
-                                <div>
-                                    I feel like my business is too dependent on me. Everything seems to go through me and I'm getting burnt out.
-                                </div>
-                            </div>
-                            
-                            <div class="message assistant">
-                                <div class="message-header">Beyond the Quarter</div>
-                                <div>
-                                    I've identified that you're experiencing a Founder Dependency challenge. This is common for founders at your stage.
-                                    <br><br>
-                                    Let me ask you a few questions to better understand your situation:
-                                    <br><br>
-                                    1. On a scale of 0-10, how dependent is your business on you for day-to-day decisions?
-                                    <br><br>
-                                    2. What areas of the business would suffer most if you were unavailable for a month?
-                                </div>
-                                
-                                <!-- Recommended Framework -->
-                                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
-                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Recommended Framework:</div>
-                                    <div style="display: flex; align-items: center; gap: 12px; background-color: #f9fafb; padding: 12px; border-radius: 4px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                        </svg>
-                                        <div>
-                                            <div style="font-weight: 500; color: #3b82f6;">Breaking Founder Dependence</div>
-                                            <div style="font-size: 12px; color: #6b7280;">Step-by-step process to move from founder-led to systems-driven</div>
-                                        </div>
-                                        <button class="btn btn-primary" style="margin-left: auto;" onclick="showTab('playbooks')">View</button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Action Buttons -->
-                                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
-                                    <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                                        </svg>
-                                        <span>Founder Dependency Diagnostic</span>
-                                    </button>
-                                    <button style="background-color: #f3f4f6; color: #111827; padding: 8px 12px; border-radius: 6px; border: none; display: flex; align-items: center; gap: 8px; font-size: 14px;" onclick="showTab('playbooks')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                        </svg>
-                                        <span>View Breaking Founder Dependence Framework</span>
-                                    </button>
-                                </div>
-                                
-                                <div style="font-size: 12px; color: #9ca3af; margin-top: 8px;">10:35 AM</div>
-                            </div>
-                        </div>
-                        
-                        <div class="chat-input">
-                            <div class="input-container">
-                                <textarea placeholder="Type your message here..." rows="1"></textarea>
-                                <button class="send-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div style="font-size: 12px; color: #6b7280; margin-top: 8px;">Press Enter to send, Shift+Enter for new line</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Insights Tab -->
-                <div class="tab-content hidden" id="insights-tab">
-                    <div class="insights-container">
-                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Insights</h2>
-                        
-                        <div class="insights-grid">
-                            <!-- Challenge Analysis -->
-                            <div class="insights-card">
-                                <h3 class="insights-title">Founder Challenge</h3>
-                                <div style="margin-bottom: 16px;">
-                                    <div class="insights-label">Primary Challenge</div>
-                                    <div class="insights-value">Founder Dependency</div>
-                                </div>
-                                <div style="margin-bottom: 16px;">
-                                    <div class="insights-label">Impact Level</div>
-                                    <div class="impact-badge impact-high">High</div>
-                                </div>
-                                <div>
-                                    <div class="insights-label" style="margin-bottom: 8px;">Risk Areas</div>
-                                    <div>
-                                        <div class="risk-item">
-                                            <div class="risk-dot"></div>
-                                            <div>Business continuity</div>
-                                        </div>
-                                        <div class="risk-item">
-                                            <div class="risk-dot"></div>
-                                            <div>Growth ceiling</div>
-                                        </div>
-                                        <div class="risk-item">
-                                            <div class="risk-dot"></div>
-                                            <div>Founder sustainability</div>
-                                        </div>
-                                        <div class="risk-item">
-                                            <div class="risk-dot"></div>
-                                            <div>Operational reliability</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Recommendations -->
-                            <div class="insights-card">
-                                <h3 class="insights-title">Recommendations</h3>
-                                <div>
-                                    <div class="recommendation-item">
-                                        <div class="recommendation-number">1</div>
-                                        <div>Document key decision frameworks</div>
-                                    </div>
-                                    <div class="recommendation-item">
-                                        <div class="recommendation-number">2</div>
-                                        <div>Develop and empower leadership team</div>
-                                    </div>
-                                    <div class="recommendation-item">
-                                        <div class="recommendation-number">3</div>
-                                        <div>Create systems for knowledge transfer</div>
-                                    </div>
-                                    <div class="recommendation-item">
-                                        <div class="recommendation-number">4</div>
-                                        <div>Implement progressive delegation plan</div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 24px;">
-                                    <button class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;" onclick="showTab('playbooks')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                        </svg>
-                                        <span>View Recommended Frameworks</span>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Founder Journey -->
-                            <div class="insights-card full-width">
-                                <h3 class="insights-title">Founder Journey</h3>
-                                <div class="journey-timeline">
-                                    <div class="timeline-line"></div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker"></div>
-                                        <div class="timeline-content">
-                                            <div style="font-weight: 500;">Current: Hands-On Operator</div>
-                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
-                                                You are deeply involved in day-to-day operations and most decisions run through you
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker future"></div>
-                                        <div class="timeline-content future">
-                                            <div style="font-weight: 500;">Next: Strategic Leader</div>
-                                            <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">
-                                                You're focused on strategic direction while your team handles operations
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Playbooks Tab -->
-                <div class="tab-content hidden" id="playbooks-tab">
-                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
-                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Founder Frameworks</h2>
-                        
-                        <div class="playbooks-grid">
-                            <!-- Playbook 1 -->
-                            <div class="playbook-card">
-                                <div class="playbook-content">
-                                    <div class="playbook-category">Growth & Leadership</div>
-                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Breaking Founder Dependence</h3>
-                                    <p style="color: #6b7280; margin-bottom: 16px;">Step-by-step process to move from founder-led to systems-driven</p>
-                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
-                                </div>
-                                <div class="playbook-footer">
-                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
-                                    <button class="btn btn-primary">View Framework</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Playbook 2 -->
-                            <div class="playbook-card">
-                                <div class="playbook-content">
-                                    <div class="playbook-category">Growth & Leadership</div>
-                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Purpose Beyond Posters</h3>
-                                    <p style="color: #6b7280; margin-bottom: 16px;">Embedding purpose into business operations</p>
-                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
-                                </div>
-                                <div class="playbook-footer">
-                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
-                                    <button class="btn btn-primary">View Framework</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Playbook 3 -->
-                            <div class="playbook-card">
-                                <div class="playbook-content">
-                                    <div class="playbook-category">Founder Journey</div>
-                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Founder Profile Development</h3>
-                                    <p style="color: #6b7280; margin-bottom: 16px;">Create your comprehensive founder profile for strategic growth</p>
-                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
-                                </div>
-                                <div class="playbook-footer">
-                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
-                                    <button class="btn btn-primary">View Framework</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Playbook 4 -->
-                            <div class="playbook-card">
-                                <div class="playbook-content">
-                                    <div class="playbook-category">Founder Journey</div>
-                                    <h3 style="font-size: 18px; font-weight: 600; margin: 4px 0 8px 0;">Scale-Ready Founder</h3>
-                                    <p style="color: #6b7280; margin-bottom: 16px;">Prepare yourself as a founder for business scaling</p>
-                                    <div class="playbook-expert">Expert: Iyas AlQasem</div>
-                                </div>
-                                <div class="playbook-footer">
-                                    <div style="font-size: 14px; color: #6b7280;">5-step implementation plan</div>
-                                    <button class="btn btn-primary">View Framework</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Settings Tab -->
-                <div class="tab-content hidden" id="settings-tab">
-                    <div style="padding: 24px; overflow-y: auto; height: 100%;">
-                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Settings</h2>
-                        
-                        <div class="insights-grid">
-                            <!-- Profile Card -->
-                            <div class="insights-card">
-                                <h3 class="insights-title">Founder Profile</h3>
-                                <div style="margin-bottom: 16px;">
-                                    <div class="insights-label">Name</div>
-                                    <div style="font-weight: 500;">Your Name</div>
-                                </div>
-                                <div style="margin-bottom: 16px;">
-                                    <div class="insights-label">Business</div>
-                                    <div style="font-weight: 500;">Your Business</div>
-                                </div>
-                                <div>
-                                    <div class="insights-label">Membership Level</div>
-                                    <div style="font-weight: 500;">Founder Profile (Basic)</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Preferences Card -->
-                            <div class="insights-card">
-                                <h3 class="insights-title">Preferences</h3>
-                                <div style="margin-bottom: 16px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-weight: 500;">Save Conversation History</span>
-                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative;">
-                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
-                                        </div>
-                                    </div>
-                                    <div style="font-size: 14px; color: #6b7280;">
-                                        Allow platform to remember our conversations
-                                    </div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-weight: 500;">Proactive Founder Insights</span>
-                                        <div style="width: 40px; height: 24px; background-color: #d1d5db; border-radius: 9999px; position: relative;">
-                                            <div style="position: absolute; left: 4px; top: 4px; width: 16px; height: 16px; background-color: white; border-radius: 50%;"></div>
-                                        </div>
-                                    </div>
-                                    <div style="font-size: 14px; color: #6b7280;">
-                                        Enable proactive founder journey insights
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Founder Journey Details Card -->
-                            <div class="insights-card full-width">
-                                <h3 class="insights-title">Founder Journey Details</h3>
-                                <div style="display: grid; gap: 16px;">
-                                    <div>
-                                        <label class="form-label">Business Revenue</label>
-                                        <select class="form-input">
-                                            <option>£0 - £100K</option>
-                                            <option>£100K - £500K</option>
-                                            <option selected>£500K - £1M</option>
-                                            <option>£1M - £3M</option>
-                                            <option>£3M - £8M</option>
-                                            <option>£8M+</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Primary Founder Challenge</label>
-                                        <select class="form-input">
-                                            <option selected>Founder Dependency</option>
-                                            <option>Founder Burnout Risk</option>
-                                            <option>Purpose Disconnect</option>
-                                            <option>Founder Role Evolution</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Founder Purpose (Optional)</label>
-                                        <textarea class="form-input" style="height: 96px;" placeholder="Why did you become a founder?"></textarea>
-                                    </div>
-                                    <div style="padding-top: 16px;">
-                                        <button class="btn btn-primary">Update Profile</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // Simple navigation between onboarding and main app
-        function showMainApp() {
-            document.getElementById('onboarding-screen').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
+                `);
+            }, 1000);
         }
         
-        // Tab switching
-        function showTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
+        function addToChatFromBlog(postId) {
+            const post = state.blogData[postId];
+            if (!post) return;
             
-            // Show the selected tab
-            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            closeModal('blog-modal');
+            addMessage('user', `I'd like to discuss the article "${post.title}".`);
             
-            // Update the active state in the sidebar
-            document.querySelectorAll('.sidebar-item').forEach((item, index) => {
-                item.classList.remove('active');
-            });
-            
-            // Find and activate the corresponding sidebar item
-            const tabIndex = ['chat', 'insights', 'playbooks', 'settings'].indexOf(tabName);
-            document.querySelectorAll('.sidebar-item')[tabIndex].classList.add('active');
+            setTimeout(() => {
+                addMessage('assistant', `
+                    That's a great article by ${post.author} about ${post.title.toLowerCase()}. 
+                    <br><br>
+                    The key takeaway is that ${postId === 'bad-news' ? 'businesses can succeed by following their values even when conventional wisdom suggests otherwise' : 
+                               postId === 'small-giants' ? 'being great can be more important than being big, with founders choosing company soul over rapid growth' :
+                               postId === 'distributed-workforce' ? 'distributed work requires rethinking people practices, processes, and technology infrastructure' :
+                               postId === 'business-serves-humanity' ? 'business should be a tool that serves humanity, not the other way around' :
+                               postId === 'beyond-quarter' ? 'thinking beyond quarterly results creates more sustainable and impactful businesses' :
+                               'leading with values and purpose creates sustainable business growth and meaningful impact'}.
+                    <br><br>
+                    How does this relate to your business challenges? I'd be curious to hear your thoughts on how these principles apply to your situation.
+                `);
+            }, 1000);
         }
+        
+        function startDiagnostic(diagnosticType) {
+            addMessage('user', `I'd like to complete the ${diagnosticType} diagnostic.`);
+            
+            setTimeout(() => {
+                if (diagnosticType === 'founder-dependency') {
+                    addMessage('assistant', `
+                        Great! Let's start your Founder Dependency Diagnostic. Please answer each question honestly to help us understand your current situation better:
+                        <br><br>
+                        <strong>1. Decision Making:</strong> On a scale of 0-10, how dependent is your business on you for day-to-day operational decisions?
+                        <br><br>
+                        <strong>2. Knowledge Distribution:</strong> What percentage of critical business knowledge exists only in your head?
+                        <br><br>
+                        <strong>3. Absence Impact:</strong> If you were completely unavailable for 2 weeks, what would happen to the business?
+                        <br><br>
+                        <strong>4. Team Empowerment:</strong> How comfortable are you delegating important decisions to your team (0-10)?
+                        <br><br>
+                        <strong>5. Systems:</strong> What processes or decisions currently have no documented systems or standard operating procedures?
+                        <br><br>
+                        Feel free to answer these questions one by one, and we'll create a personalized plan to reduce founder dependency based on your responses.
+                    `);
+                } else if (diagnosticType === 'founder-profile') {
+                    addMessage('assistant', `
+                        Let's create your Founder Profile! This will help us understand your strengths, values, and ideal role. Please answer these questions:
+                        <br><br>
+                        <strong>1. Core Strengths:</strong> What are 3-5 things you're exceptionally good at in your business?
+                        <br><br>
+                        <strong>2. Energy Sources:</strong> Which activities in your business give you the most energy and excitement?
+                        <br><br>
+                        <strong>3. Energy Drains:</strong> Which activities consistently drain your energy or motivation?
+                        <br><br>
+                        <strong>4. Values:</strong> What are your most important personal values that you want reflected in your business?
+                        <br><br>
+                        <strong>5. Ideal Role:</strong> If you could design your perfect role in the company 2 years from now, what would it look like?
+                        <br><br>
+                        Take your time with these questions. Your answers will help us create a strategic plan for evolving your founder role in alignment with your strengths and values.
+                    `);
+                } else if (diagnosticType === 'scale-readiness') {
+                    addMessage('assistant', `
+                        Let's assess your Scale Readiness! These questions will help us understand how prepared you and your business are for growth:
+                        <br><br>
+                        <strong>1. Leadership Team:</strong> Do you have leaders in place who can drive growth in key areas without your constant involvement?
+                        <br><br>
+                        <strong>2. Systems & Processes:</strong> How well documented and followed are your core business processes (0-10)?
+                        <br><br>
+                        <strong>3. Personal Capacity:</strong> How much bandwidth do you currently have for new initiatives (0-10)?
+                        <br><br>
+                        <strong>4. Growth Bottlenecks:</strong> What aspects of the business would struggle most with a sudden 3x increase in volume?
+                        <br><br>
+                        <strong>5. Support Network:</strong> What personal and professional support systems do you have in place to sustain you through scaling?
+                        <br><br>
+                        Your answers will help us identify the key areas to address before scaling to ensure sustainable growth for both you and the business.
+                    `);
+                } else if (diagnosticType === 'purpose-alignment') {
+                    addMessage('assistant', `
+                        Let's explore your Purpose Alignment with this diagnostic. These questions will help reveal how well your business operations reflect your core purpose:
+                        <br><br>
+                        <strong>1. Founding Purpose:</strong> What was the original purpose that motivated you to start this business?
+                        <br><br>
+                        <strong>2. Current Alignment:</strong> On a scale of 0-10, how well do your current business operations reflect that purpose?
+                        <br><br>
+                        <strong>3. Decision Making:</strong> How often does purpose explicitly factor into major business decisions?
+                        <br><br>
+                        <strong>4. Team Connection:</strong> If I asked your team members about the company's purpose, how aligned would their answers be?
+                        <br><br>
+                        <strong>5. Purpose Friction:</strong> What aspects of your business feel most disconnected from or in tension with your purpose?
+                        <br><br>
+                        Your answers will help us create a practical plan for better integrating your purpose into daily operations and strategic decisions.
+                    `);
+                } else if (diagnosticType === 'founder-wellbeing') {
+                    addMessage('assistant', `
+                        Let's assess your Founder Wellbeing. These questions will help us understand your current sustainability and create strategies to prevent burnout:
+                        <br><br>
+                        <strong>1. Energy Levels:</strong> On a typical workday, how would you rate your energy levels (0-10)?
+                        <br><br>
+                        <strong>2. Work Hours:</strong> How many hours per week are you currently working?
+                        <br><br>
+                        <strong>3. Stress Impact:</strong> How often does work stress affect your sleep, relationships, or health?
+                        <br><br>
+                        <strong>4. Recovery Practices:</strong> What regular practices do you have for renewal and recovery?
+                        <br><br>
+                        <strong>5. Boundaries:</strong> How effective are your boundaries between work and personal life (0-10)?
+                        <br><br>
+                        Your honest answers will help us develop sustainable practices that support your wellbeing while driving business success.
+                    `);
+                } else {
+                    addMessage('assistant', `
+                        I'm not familiar with that specific diagnostic type. Would you like to try one of our standard assessments instead?
+                        <br><br>
+                        - Founder Dependency Diagnostic
+                        - Founder Profile Assessment
+                        - Scale Readiness Assessment
+                        - Purpose Alignment Diagnostic
+                        - Founder Wellbeing Assessment
+                        <br><br>
+                        Or I can create a comprehensive assessment that covers multiple areas.
+                    `);
+                }
+            }, 1000);
+        }
+        
+        function startComprehensiveDiagnostic() {
+            addMessage('user', "I'd like to complete a comprehensive founder profile assessment.");
+            
+            setTimeout(() => {
+                addMessage('assistant', `
+                    I'd be happy to guide you through our comprehensive Founder Profile Assessment. This will cover multiple dimensions of your founder journey to give us a complete picture. Let's start with the first section:
+                    <br><br>
+                    <strong>Section 1: Founder Role & Dependency</strong>
+                    <br><br>
+                    1. What are your primary responsibilities in the business right now?
+                    <br><br>
+                    2. On a scale of 0-10, how dependent is the business on your direct involvement for day-to-day operations?
+                    <br><br>
+                    3. What aspects of the business would be most impacted if you were unavailable for a month?
+                    <br><br>
+                    Once you've answered these initial questions, we'll move on to the next section about your strengths and values. This comprehensive assessment will help us identify the most important areas to focus on for your development as a founder.
+                `);
+            }, 1000);
+        }
+        
+        function startImplementation(playbookId, step) {
+            const playbook = state.playbookData[playbookId];
+            if (!playbook || !playbook.steps[step - 1]) return;
+            
+            addMessage('user', `I'd like to start implementing the ${playbook.title} framework, beginning with step ${step}: ${playbook.steps[step - 1].title}.`);
+            
+            setTimeout(() => {
+                addMessage('assistant', `
+                    Great choice! Let's start implementing <strong>${playbook.steps[step - 1].title}</strong>, the first step in the ${playbook.title} framework.
+                    <br><br>
+                    <strong>Overview:</strong> ${playbook.steps[step - 1].description}
+                    <br><br>
+                    <strong>Implementation Guide:</strong>
+                    <br><br>
+                    ${playbookId === 'founder-independence' && step === 1 ? `
+                        1. Set aside 2-3 hours of uninterrupted time to audit your decisions.
+                        <br><br>
+                        2. Create a decision log for 1-2 weeks, noting every decision that comes to you.
+                        <br><br>
+                        3. Categorize each decision as:
+                           - Strategic (impacts long-term direction)
+                           - Operational (impacts day-to-day execution)
+                           - Technical (requires specialized knowledge)
+                        <br><br>
+                        4. For each decision, note whether it:
+                           - Must remain with you
+                           - Could be delegated with training
+                           - Could be delegated with a system/process
+                           - Should already be delegated
+                        <br><br>
+                        5. Identify the top 3-5 decision areas consuming most of your time.
+                    ` : playbookId === 'purpose-integration' && step === 1 ? `
+                        1. Schedule a half-day personal reflection session.
+                        <br><br>
+                        2. Journal on these questions:
+                           - Why did you start this business? (beyond financial reasons)
+                           - What change do you hope to create in the world?
+                           - What would make you proud of this business in 10 years?
+                        <br><br>
+                        3. Draft 3-5 purpose statements that capture your answers.
+                        <br><br>
+                        4. Test each statement by asking:
+                           - Does it energize and inspire you?
+                           - Is it authentic to your values?
+                           - Can it guide difficult business decisions?
+                        <br><br>
+                        5. Refine your purpose statement until it resonates deeply.
+                    ` : playbookId === 'founder-profile' && step === 1 ? `
+                        1. Complete a formal strengths assessment (StrengthsFinder, VIA, etc.)
+                        <br><br>
+                        2. Track your energy for 1-2 weeks, noting when you feel:
+                           - Energized and in flow
+                           - Drained and resistant
+                        <br><br>
+                        3. Review your calendar for the past month:
+                           - Highlight activities you enjoyed
+                           - Cross out activities you disliked
+                        <br><br>
+                        4. Identify patterns across these exercises.
+                        <br><br>
+                        5. Create your strengths profile: 3-5 core strengths and when they show up.
+                    ` : playbookId === 'scale-ready-founder' && step === 1 ? `
+                        1. Rate your readiness in these areas (0-10):
+                           - Leadership team capabilities
+                           - Systems & processes
+                           - Personal capacity
+                           - Financial resources
+                           - Support network
+                        <br><br>
+                        2. For each area rated below 7, identify specific gaps.
+                        <br><br>
+                        3. Interview 2-3 team members about scaling readiness.
+                        <br><br>
+                        4. Consult with 1-2 founders who've successfully scaled.
+                        <br><br>
+                        5. Create a prioritized list of readiness gaps to address.
+                    ` : `
+                        1. Let's create a customized implementation plan for this step.
+                        <br><br>
+                        2. What specific challenges do you anticipate with this step?
+                        <br><br>
+                        3. What resources or support would help you implement effectively?
+                        <br><br>
+                        4. What timeline feels realistic for completing this step?
+                    `}
+                    <br><br>
+                    Would you like to get started with this implementation plan? I can help you adapt it to your specific situation.
+                `);
+            }, 1000);
+        }
+        
+        function scheduleCall(memberId) {
+            const member = state.teamData[memberId];
+            if (!member) return;
+            
+            closeModal('team-modal');
+            closeModal('team-profile-modal');
+            
+            document.getElementById('calendar-modal-title').textContent = `Schedule a Call with ${member.name}`;
+            document.getElementById('calendar-expert-name').textContent = member.name;
+            
+            showModal('calendar-modal');
+        }
+        
+        function scheduleCallFromPlaybook(playbookId) {
+            const playbook = state.playbookData[playbookId];
+            if (!playbook) return;
+            
+            closeModal('playbook-modal');
+            
+            // Find the expert for this playbook
+            let expertId = 'iyas';
+            if (playbook.expert === 'Liam McDowell') expertId = 'liam';
+            else if (playbook.expert === 'Philip Gault') expertId = 'philip';
+            
+            scheduleCall(expertId);
+        }
+        
+        function confirmSchedule() {
+            closeModal('calendar-modal');
+            showModal('confirm-modal');
+        }
+        
+        function sharePost(postId) {
+            closeModal('blog-modal');
+            
+            // In a real implementation, this would open a share dialog
+            alert('Sharing functionality would be implemented here.');
+        }
+        
+        function toggleSwitch(element) {
+            // Toggle active state
+            const isActive = element.classList.contains('bg-blue-600');
+            
+            if (isActive) {
+                element.classList.remove('bg-blue-600');
+                element.classList.add('bg-gray-300');
+                element.querySelector('div').style.left = '4px';
+            } else {
+                element.classList.remove('bg-gray-300');
+                element.classList.add('bg-blue-600');
+                element.querySelector('div').style.left = '20px';
+            }
+        }
+        
+        // Event listeners
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Initialize the app
     </script>
 </body>
 </html>
