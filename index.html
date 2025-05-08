@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -733,18 +734,21 @@
             <h2 style="font-size: 20px; margin-top: 0; margin-bottom: 16px;">Let's get started</h2>
             
             <div class="form-group">
-                <label class="form-label">Your Name</label>
-                <input type="text" class="form-input" placeholder="Enter your name" id="onboarding-name" value="Sam Johnson">
+                <label class="form-label">Your Name <span style="color: #ef4444;">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter your name" id="onboarding-name" value="Sam Johnson" required>
+                <div class="error-message" id="name-error" style="color: #ef4444; font-size: 12px; margin-top: 4px; display: none;">Please enter your name</div>
             </div>
             
             <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" placeholder="Enter your email" id="onboarding-email" value="sam@urbanthread.co.uk">
+                <label class="form-label">Email Address <span style="color: #ef4444;">*</span></label>
+                <input type="email" class="form-input" placeholder="Enter your email" id="onboarding-email" value="sam@urbanthread.co.uk" required>
+                <div class="error-message" id="email-error" style="color: #ef4444; font-size: 12px; margin-top: 4px; display: none;">Please enter a valid email address</div>
             </div>
             
             <div class="form-group">
-                <label class="form-label">Business Name</label>
-                <input type="text" class="form-input" placeholder="Enter your business name" id="onboarding-business" value="Urban Thread">
+                <label class="form-label">Business Name <span style="color: #ef4444;">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter your business name" id="onboarding-business" value="Urban Thread" required>
+                <div class="error-message" id="business-error" style="color: #ef4444; font-size: 12px; margin-top: 4px; display: none;">Please enter your business name</div>
             </div>
             
             <div class="form-actions">
@@ -2334,35 +2338,73 @@
             console.log("Continue button clicked");
             
             if (state.currentStep === 1) {
-                // Capture user info
+                // Get form elements
                 const nameInput = document.getElementById('onboarding-name');
                 const emailInput = document.getElementById('onboarding-email');
                 const businessInput = document.getElementById('onboarding-business');
                 
-                if (nameInput) state.userName = nameInput.value || 'User';
-                if (emailInput) state.userEmail = emailInput.value || 'user@example.com';
-                if (businessInput) state.userBusiness = businessInput.value || 'Your Business';
+                const nameError = document.getElementById('name-error');
+                const emailError = document.getElementById('email-error');
+                const businessError = document.getElementById('business-error');
                 
-                console.log("User info captured:", state);
+                // Reset error messages
+                if (nameError) nameError.style.display = 'none';
+                if (emailError) emailError.style.display = 'none';
+                if (businessError) businessError.style.display = 'none';
                 
-                // Move to main app
-                const onboardingScreen = document.getElementById('onboarding-screen');
-                const mainApp = document.getElementById('main-app');
+                // Validate all fields
+                let isValid = true;
                 
-                if (onboardingScreen) onboardingScreen.classList.add('hidden');
-                if (mainApp) mainApp.classList.remove('hidden');
+                // Validate name
+                if (!nameInput || !nameInput.value.trim()) {
+                    if (nameError) nameError.style.display = 'block';
+                    isValid = false;
+                    if (nameInput) nameInput.focus();
+                }
                 
-                // Update profile info
-                const profileName = document.getElementById('profile-name');
-                const profileBusiness = document.getElementById('profile-business');
-                const profileEmail = document.getElementById('profile-email');
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailInput || !emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
+                    if (emailError) emailError.style.display = 'block';
+                    isValid = false;
+                    if (emailInput && isValid) emailInput.focus();
+                }
                 
-                if (profileName) profileName.textContent = state.userName;
-                if (profileBusiness) profileBusiness.textContent = state.userBusiness;
-                if (profileEmail) profileEmail.textContent = state.userEmail;
+                // Validate business name
+                if (!businessInput || !businessInput.value.trim()) {
+                    if (businessError) businessError.style.display = 'block';
+                    isValid = false;
+                    if (businessInput && isValid) businessInput.focus();
+                }
                 
-                // Add greeting message
-                window.addMessage('assistant', `Welcome, ${state.userName}! I'm your founder coach from Beyond the Quarter. I'm here to help you build a purpose-driven business that's sustainable for you personally and can scale effectively. What founder challenges are you facing right now?`);
+                // If all fields are valid, proceed
+                if (isValid) {
+                    // Capture user info
+                    state.userName = nameInput.value.trim();
+                    state.userEmail = emailInput.value.trim();
+                    state.userBusiness = businessInput.value.trim();
+                    
+                    console.log("User info captured:", state);
+                    
+                    // Move to main app
+                    const onboardingScreen = document.getElementById('onboarding-screen');
+                    const mainApp = document.getElementById('main-app');
+                    
+                    if (onboardingScreen) onboardingScreen.classList.add('hidden');
+                    if (mainApp) mainApp.classList.remove('hidden');
+                    
+                    // Update profile info
+                    const profileName = document.getElementById('profile-name');
+                    const profileBusiness = document.getElementById('profile-business');
+                    const profileEmail = document.getElementById('profile-email');
+                    
+                    if (profileName) profileName.textContent = state.userName;
+                    if (profileBusiness) profileBusiness.textContent = state.userBusiness;
+                    if (profileEmail) profileEmail.textContent = state.userEmail;
+                    
+                    // Add greeting message
+                    window.addMessage('assistant', `Welcome, ${state.userName}! I'm your founder coach from Beyond the Quarter. I'm here to help you build a purpose-driven business that's sustainable for you personally and can scale effectively. What founder challenges are you facing right now?`);
+                }
             }
         };
         
